@@ -3,13 +3,12 @@ package com.example.myapplication;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class AlertDialog extends DialogFragment {
+public class AlertDialogPass extends DialogFragment {
 
     @NonNull
     @Override
