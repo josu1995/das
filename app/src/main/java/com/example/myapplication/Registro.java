@@ -6,8 +6,11 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Registro extends AppCompatActivity {
+    Bd GestorBD = new Bd(this,"biblioteca",null,3);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,17 @@ public class Registro extends AppCompatActivity {
                     dialogo.show(getSupportFragmentManager(),"registro");
                     pass.getText().clear();
                     pass2.getText().clear();
-                }else {
+                }else{
+                    String[] args = {usuario.getText().toString(),};
+                    Cursor cu = Consultas.getUserRegistro(args,GestorBD);
+                    if(cu.moveToNext()) {
+                        DialogFragment dialogo = new AlertDialogUsuario();
+                        dialogo.show(getSupportFragmentManager(),"usuario");
+                        usuario.getText().clear();
+                        pass.getText().clear();
+                        pass2.getText().clear();
+                    }else{
+                        Consultas.registrarUsuario(usuario.getText().toString(), pass.getText().toString(),GestorBD);
 
                     NotificationManager elManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getApplicationContext(), "RegistroOk");
@@ -65,10 +79,10 @@ public class Registro extends AppCompatActivity {
 
                     elManager.notify(1, elBuilder.build());
 
-
                     Intent i = new Intent(getApplicationContext(),Login.class);
                     startActivity(i);
                     finish();
+                    }
                 }
             }
         });

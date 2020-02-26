@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -14,13 +15,12 @@ import android.widget.EditText;
 
 public class Login extends AppCompatActivity {
 
+    SQLiteDatabase bd = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-        Bd GestorBD = new Bd(this,"biblioteca",null,2);
-        SQLiteDatabase bd  = GestorBD.getWritableDatabase();
+        final Bd GestorBD = new Bd(this,"biblioteca",null,3);
 
         Button login = findViewById(R.id.login);
         Button registro = findViewById(R.id.newRegistro);
@@ -32,28 +32,30 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("AAA","Login");
-                Log.i("AAA",usuario.getText().toString());
-                Log.i("AAA",pass.getText().toString());
-                /*Cursor c = bd.rawQuery("SELECT Nombre,Pass FROM USUARIOS ",null);
-                while (c.moveToNext()){
-                    int od = c.getInt(0);
-                    String om = c.getString(1);
-                    String pass = c.getString(2);
-                    Log.i("AA",od+om+pass);
-                 }*/
+                String[] args = {usuario.getText().toString(),pass.getText().toString()};
+                Cursor cu = Consultas.getLogin(args,GestorBD);
+                if(cu.moveToNext()){
+                    Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                    i.putExtra("user",usuario.getText().toString());
+                    i.putExtra("id",cu.getInt(0));
+                    startActivity(i);
+                    cu.close();
+                    finish();
+                }else{
+                    usuario.getText().clear();
+                    pass.getText().clear();
+                    DialogFragment dialogo = new AlertDialogLogin();
+                    dialogo.show(getSupportFragmentManager(),"login");
+                    cu.close();
+                }
 
-                Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
-                i.putExtra("user",usuario.getText().toString());
-                startActivity(i);
-                finish();
+
             }
         });
 
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("AAA","registro");
                 Intent i = new Intent(getApplicationContext(), Registro.class);
                 startActivity(i);
 

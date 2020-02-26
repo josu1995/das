@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +15,20 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class MandarMail extends AppCompatActivity {
-
-
-
+    double [] d = null;
+    String[] arrayLibros = null;
+    String texto = "Listado de libros: \n";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mandar_mail);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String usuario= extras.getString("user");
+            d = extras.getDoubleArray("valoracion");
+            arrayLibros = extras.getStringArray("nombreLibros");
+        }
 
        /* Toolbar barra = findViewById(R.id.toolbar);
         setSupportActionBar(barra);*/
@@ -29,6 +37,10 @@ public class MandarMail extends AppCompatActivity {
         final EditText emailE = findViewById(R.id.email);
         final EditText asuntoE = findViewById(R.id.asunto);
 
+        for (int i =0;i<d.length;i++){
+            texto = texto + "Libro: " + arrayLibros[i] + " valoracion: "+ d[i]*2 +"\n";
+        }
+        Log.i("AA",texto);
 
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,9 +49,9 @@ public class MandarMail extends AppCompatActivity {
                 String asunto = asuntoE.getText().toString();
                 Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+email));
                 i.putExtra(Intent.EXTRA_SUBJECT,asunto);
+                i.putExtra(Intent.EXTRA_TEXT, texto);
 
-
-                startActivity(Intent.createChooser(i,"Título del chooser"));
+                startActivity(Intent.createChooser(i,"Mis valoraciones"));
             }
         });
 
