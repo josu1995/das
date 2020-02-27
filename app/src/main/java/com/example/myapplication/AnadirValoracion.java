@@ -77,6 +77,7 @@ public class AnadirValoracion extends AppCompatActivity {
                         //Añadimos la valoracion
                         Consultas.anadirValoracion(id,idLibro,valoracion.getText().toString(),GestorBD);
                         Intent i = new Intent(getApplicationContext(),MenuPrincipal.class);
+                        i.putExtra("id",id);
                         startActivity(i);
                         finish();
                     }

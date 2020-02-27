@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class AdaptadorListView extends BaseAdapter {
         RatingBar barra= (RatingBar) view.findViewById(R.id.ratingBar);
         nombre.setText(datos[i]);
         barra.setRating((float)puntuaciones[i]);
+
         return view;
     }
 }

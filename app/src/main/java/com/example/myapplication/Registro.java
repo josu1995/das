@@ -60,10 +60,10 @@ public class Registro extends AppCompatActivity {
                         Consultas.registrarUsuario(usuario.getText().toString(), pass.getText().toString(),GestorBD);
 
                     NotificationManager elManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getApplicationContext(), "RegistroOk");
+                    NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getBaseContext(), "RegistroOk");
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        NotificationChannel elCanal = new NotificationChannel("IdCanal", "NombreCanal", NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationChannel elCanal = new NotificationChannel("RegistroOk", "NombreCanal", NotificationManager.IMPORTANCE_HIGH);
                         elCanal.setDescription("Descripción del canal");
                         elCanal.enableLights(true);
                         elCanal.setLightColor(Color.RED);
@@ -78,6 +78,9 @@ public class Registro extends AppCompatActivity {
                             .setAutoCancel(true);
 
                     elManager.notify(1, elBuilder.build());
+
+
+
 
                     Intent i = new Intent(getApplicationContext(),Login.class);
                     startActivity(i);

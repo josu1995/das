@@ -72,5 +72,13 @@ public class Consultas {
         return bd.query("VALORACIONES",null,"idUsuario=?",args,null,null,null);
     }
 
+    public static void updateValoracion(String[] args,double val,Bd GestorBD){
+        SQLiteDatabase bd  = GestorBD.getWritableDatabase();
+        ContentValues modificacion = new ContentValues();
+        modificacion.put("valoracion",val);
+        bd.update("VALORACIONES", modificacion, "IdUsuario=? AND IdLibro=?", args);
+
+    }
+
 
 }

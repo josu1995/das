@@ -17,8 +17,9 @@ import java.util.ArrayList;
 public class MisValoraciones extends AppCompatActivity {
     Bd GestorBD = new Bd(this,"biblioteca",null,3);
     int id =0;
-    double [] d = null;
-    String[] arrayLibros = null;
+    double [] d;
+    String[] arrayLibros;
+    ArrayList<Integer> idLibros = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ArrayList<String> nombreLibros = new ArrayList<String>();
@@ -30,11 +31,11 @@ public class MisValoraciones extends AppCompatActivity {
             id = extras.getInt("id");
         }
         String [] args = {Integer.toString(id)};
-
         Cursor cu = Consultas.getValoracionesUsuario(args,GestorBD);
         while (cu.moveToNext()){
             int idLibro = cu.getInt(1);
             double val = cu.getDouble(2);
+            idLibros.add(idLibro);
             String [] arg = {Integer.toString(idLibro)};
             Cursor c = Consultas.getLibroById(arg,GestorBD);
             c.moveToNext();
@@ -58,10 +59,16 @@ public class MisValoraciones extends AppCompatActivity {
         AdaptadorListView eladap= new AdaptadorListView(getApplicationContext(),arrayLibros,d);
         libros.setAdapter(eladap);
 
-        libros.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        libros.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long numero) {
                 Log.i("AA", ((TextView)view.findViewById(R.id.nombreLibro)).getText().toString());
+                Intent i = new Intent(getApplicationContext(),CambiarValoracion.class);
+                i.putExtra("NombreLibro",((TextView)view.findViewById(R.id.nombreLibro)).getText().toString());
+                i.putExtra("id",id);
+                i.putExtra("idLibro",idLibros.get(position));
+                startActivity(i);
+                return false;
             }
         });
 
