@@ -15,8 +15,8 @@ import android.widget.EditText;
 
 public class AnadirValoracion extends AppCompatActivity {
 
-
-    int id= 0;
+    double val = 0;
+    int id= Singelton.getIdUsuario();
     int idLibro =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +25,6 @@ public class AnadirValoracion extends AppCompatActivity {
 
         final Bd GestorBD = new Bd(this,"biblioteca",null,3);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            id = extras.getInt("id");
-        }
 
         Button añadir = findViewById(R.id.anadirAnadir);
         final EditText nombre = findViewById(R.id.anadirNombreLibro);
@@ -38,51 +34,54 @@ public class AnadirValoracion extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 nombre.getText().toString();
-                double val = Double.parseDouble(valoracion.getText().toString().replace(",","."));
-                if(val < 0 || val > 10){
-                    //Error
-                    DialogFragment dialogo = new AlertDialogValoracion();
-                    dialogo.show(getSupportFragmentManager(),"valoracion");
-                    valoracion.getText().clear();
-                }else {
-                    String[] args = {nombre.getText().toString()};
-                    Cursor cu = Consultas.getLibro(args,GestorBD);
-                    if(cu.moveToNext()){
-                        idLibro=cu.getInt(0);
-                        cu.close();
-                        String[] argumentos = {Integer.toString(id),Integer.toString(idLibro)};
-                        Cursor cur = Consultas.getValoracionUsuarioLibro(argumentos,GestorBD);
-                        if(cur.moveToNext()){
-                           DialogFragment dialogo = new AlertDialogNewValoracion();
-                           dialogo.show(getSupportFragmentManager(),"valoracionRepetida");
-                           cur.close();
-                        }else{
+                if(valoracion.getText().toString().matches("^[0-9]+([,.][0-9]+)?$") && valoracion.getText().toString().length() > 0) {
+                     val = Double.parseDouble(valoracion.getText().toString().replace(",", "."));
+                    if (val < 0 || val > 10) {
+                        //Error
+                        DialogFragment dialogo = new AlertDialogValoracion();
+                        dialogo.show(getSupportFragmentManager(), "valoracion");
+                        valoracion.getText().clear();
+                    } else {
+                        String[] args = {nombre.getText().toString().toUpperCase()};
+                        Cursor cu = Consultas.getLibro(args, GestorBD);
+                        if (cu.moveToNext()) {
+                            idLibro = cu.getInt(0);
+                            cu.close();
+                            String[] argumentos = {Integer.toString(id), Integer.toString(idLibro)};
+                            Cursor cur = Consultas.getValoracionUsuarioLibro(argumentos, GestorBD);
+                            if (cur.moveToNext()) {
+                                DialogFragment dialogo = new AlertDialogNewValoracion();
+                                dialogo.show(getSupportFragmentManager(), "valoracionRepetida");
+                                cur.close();
+                            } else {
+                                //Añadimos la valoracion
+                                Consultas.anadirValoracion(id, idLibro, Double.toString(val), GestorBD);
+                                Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                                startActivity(i);
+                                finish();
+                            }
+                        } else {
+                            //Inserto el libro ya que no existe
+                            cu.close();
+                            Consultas.anadirLibro(nombre.getText().toString().toUpperCase(), GestorBD);
+
+                            //Sacamos el id del libro
+                            Cursor c = Consultas.getIdLibro(args, GestorBD);
+                            c.moveToNext();
+                            idLibro = c.getInt(0);
+                            c.close();
+
                             //Añadimos la valoracion
-                            Consultas.anadirValoracion(id,idLibro,valoracion.getText().toString(),GestorBD);
-                            Intent i = new Intent(getApplicationContext(),MenuPrincipal.class);
+                            Consultas.anadirValoracion(id, idLibro, Double.toString(val), GestorBD);
+                            Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
                             startActivity(i);
                             finish();
                         }
-                    }else{
-                        //Inserto el libro ya que no existe
-                          cu.close();
-                          Consultas.anadirLibro(nombre.getText().toString(),GestorBD);
-
-                          //Sacamos el id del libro
-                        Cursor c = Consultas.getIdLibro(args,GestorBD);
-                        c.moveToNext();
-                        idLibro=c.getInt(0);
-                        c.close();
-
-                        //Añadimos la valoracion
-                        Consultas.anadirValoracion(id,idLibro,valoracion.getText().toString(),GestorBD);
-                        Intent i = new Intent(getApplicationContext(),MenuPrincipal.class);
-                        i.putExtra("id",id);
-                        startActivity(i);
-                        finish();
                     }
-
-
+                }else{
+                    valoracion.getText().clear();
+                    DialogFragment dialogo = new AlertDialogNotNumero();
+                    dialogo.show(getSupportFragmentManager(),"notNumero");
 
                 }
             }

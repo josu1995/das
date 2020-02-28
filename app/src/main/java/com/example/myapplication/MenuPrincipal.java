@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MenuPrincipal extends AppCompatActivity {
-    int id= 0;
+    int id= Singelton.getIdUsuario();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,11 +18,8 @@ public class MenuPrincipal extends AppCompatActivity {
 
         TextView user = findViewById(R.id.bnv);
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String usuario= extras.getString("user");
-            user.setText(user.getText().toString() + usuario);
-            id = extras.getInt("id");
-        }
+
+        user.setText(Singelton.getNombreUsuario());
 
         Button añadir = findViewById(R.id.anadir);
         Button valoraciones = findViewById(R.id.valoraciones);

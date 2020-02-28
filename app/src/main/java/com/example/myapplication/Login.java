@@ -35,9 +35,9 @@ public class Login extends AppCompatActivity {
                 String[] args = {usuario.getText().toString(),pass.getText().toString()};
                 Cursor cu = Consultas.getLogin(args,GestorBD);
                 if(cu.moveToNext()){
+                    Singelton.setNombreUsuario(usuario.getText().toString());
+                    Singelton.setIdUsuario(cu.getInt(0));
                     Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
-                    i.putExtra("user",usuario.getText().toString());
-                    i.putExtra("id",cu.getInt(0));
                     startActivity(i);
                     cu.close();
                     finish();

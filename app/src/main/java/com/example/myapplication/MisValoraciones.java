@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class MisValoraciones extends AppCompatActivity {
     Bd GestorBD = new Bd(this,"biblioteca",null,3);
-    int id =0;
+    int id =Singelton.getIdUsuario();;
     double [] d;
     String[] arrayLibros;
     ArrayList<Integer> idLibros = new ArrayList<>();
@@ -25,11 +25,6 @@ public class MisValoraciones extends AppCompatActivity {
         ArrayList<String> nombreLibros = new ArrayList<String>();
         ArrayList<Double> valoraciones = new ArrayList<Double>();
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String usuario= extras.getString("user");
-            id = extras.getInt("id");
-        }
         String [] args = {Integer.toString(id)};
         Cursor cu = Consultas.getValoracionesUsuario(args,GestorBD);
         while (cu.moveToNext()){
@@ -62,10 +57,8 @@ public class MisValoraciones extends AppCompatActivity {
         libros.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long numero) {
-                Log.i("AA", ((TextView)view.findViewById(R.id.nombreLibro)).getText().toString());
                 Intent i = new Intent(getApplicationContext(),CambiarValoracion.class);
                 i.putExtra("NombreLibro",((TextView)view.findViewById(R.id.nombreLibro)).getText().toString());
-                i.putExtra("id",id);
                 i.putExtra("idLibro",idLibros.get(position));
                 startActivity(i);
                 return false;

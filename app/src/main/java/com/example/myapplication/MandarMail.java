@@ -40,7 +40,6 @@ public class MandarMail extends AppCompatActivity {
         for (int i =0;i<d.length;i++){
             texto = texto + "Libro: " + arrayLibros[i] + " valoracion: "+ d[i]*2 +"\n";
         }
-        Log.i("AA",texto);
 
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override

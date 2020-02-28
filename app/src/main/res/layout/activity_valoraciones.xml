@@ -19,11 +19,13 @@
 
     <ListView
         android:id="@+id/listadoLibros"
-        android:layout_width="413dp"
-        android:layout_height="669dp"
+        android:layout_width="406dp"
+        android:layout_height="618dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="1dp"
+        android:layout_marginBottom="62dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />

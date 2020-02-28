@@ -73,7 +73,7 @@ public class Registro extends AppCompatActivity {
                     }
                     elBuilder.setSmallIcon(android.R.drawable.stat_sys_warning)
                             .setContentTitle("Registro")
-                            .setContentText("El registro se complento correctamente.")
+                            .setContentText("El registro se completó correctamente.")
                             .setVibrate(new long[]{0, 1000, 500, 1000})
                             .setAutoCancel(true);
 

@@ -18,7 +18,7 @@ import android.widget.EditText;
 
 public class CambiarValoracion extends AppCompatActivity {
     Bd GestorBD = new Bd(this,"biblioteca",null,3);
-    int id=0;
+    int id=Singelton.getIdUsuario();
     int idLibro=0;
     String nombreLibro = "";
     @Override
@@ -29,54 +29,58 @@ public class CambiarValoracion extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String usuario= extras.getString("user");
-            id = extras.getInt("id");
             idLibro = extras.getInt("idLibro");
             nombreLibro = extras.getString("NombreLibro");
-
         }
         Button cambiar = findViewById(R.id.cambiarCambiar);
         EditText nombre = findViewById(R.id.cambiarNombre);
         nombre.setText(nombreLibro);
+        nombre.setEnabled(false);
         final EditText valoracion = findViewById(R.id.cambiarValoracion);
 
         cambiar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double val = Double.parseDouble(valoracion.getText().toString().replace(",","."));
-                Log.i("AA", val + "");
-                if(val < 0 || val > 10){
-                    //Error
-                    DialogFragment dialogo = new AlertDialogValoracion();
-                    dialogo.show(getSupportFragmentManager(),"cambiarValoracion");
-                    valoracion.getText().clear();
-                }else {
-                    String [] args = {Integer.toString(id),Integer.toString(idLibro)};
-                    Consultas.updateValoracion(args,Double.parseDouble(valoracion.getText().toString()),GestorBD);
+                if (valoracion.getText().toString().matches("^[0-9]+([,.][0-9]+)?$") && valoracion.getText().toString().length() > 0) {
+                    double val = Double.parseDouble(valoracion.getText().toString().replace(",", "."));
+                    Log.i("AA", val + "");
+                    if (val < 0 || val > 10) {
+                        //Error
+                        DialogFragment dialogo = new AlertDialogValoracion();
+                        dialogo.show(getSupportFragmentManager(), "cambiarValoracion");
+                        valoracion.getText().clear();
+                    } else {
+                        String[] args = {Integer.toString(id), Integer.toString(idLibro)};
+                        Consultas.updateValoracion(args, Double.parseDouble(valoracion.getText().toString()), GestorBD);
 
-                    NotificationManager elManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getBaseContext(), "CambioValoracion");
+                        NotificationManager elManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getBaseContext(), "CambioValoracion");
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        NotificationChannel elCanal = new NotificationChannel("CambioValoracion", "NombreCanal", NotificationManager.IMPORTANCE_HIGH);
-                        elCanal.setDescription("Descripción del canal");
-                        elCanal.enableLights(true);
-                        elCanal.setLightColor(Color.RED);
-                        elCanal.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-                        elCanal.enableVibration(true);
-                        elManager.createNotificationChannel(elCanal);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            NotificationChannel elCanal = new NotificationChannel("CambioValoracion", "NombreCanal", NotificationManager.IMPORTANCE_HIGH);
+                            elCanal.setDescription("Descripción del canal");
+                            elCanal.enableLights(true);
+                            elCanal.setLightColor(Color.RED);
+                            elCanal.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+                            elCanal.enableVibration(true);
+                            elManager.createNotificationChannel(elCanal);
+                        }
+                        elBuilder.setSmallIcon(android.R.drawable.stat_sys_warning)
+                                .setContentTitle("Valoracion")
+                                .setContentText("Su valoracion se modifico correctamente.")
+                                .setVibrate(new long[]{0, 1000, 500, 1000})
+                                .setAutoCancel(true);
+
+                        elManager.notify(1, elBuilder.build());
+
+                        Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                        startActivity(i);
+                        finish();
                     }
-                    elBuilder.setSmallIcon(android.R.drawable.stat_sys_warning)
-                            .setContentTitle("Valoracion")
-                            .setContentText("Su valoracion se modifico correctamente.")
-                            .setVibrate(new long[]{0, 1000, 500, 1000})
-                            .setAutoCancel(true);
-
-                    elManager.notify(1, elBuilder.build());
-
-                    Intent i = new Intent(getApplicationContext(),MenuPrincipal.class);
-                    i.putExtra("id",id);
-                    startActivity(i);
-                    finish();
+                }else{
+                    valoracion.getText().clear();
+                    DialogFragment dialogo = new AlertDialogNotNumero();
+                    dialogo.show(getSupportFragmentManager(),"notNumero");
                 }
             }
         });
