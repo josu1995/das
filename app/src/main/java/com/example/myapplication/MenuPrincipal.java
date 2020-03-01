@@ -17,19 +17,19 @@ public class MenuPrincipal extends AppCompatActivity {
         setContentView(R.layout.activity_menu_principal);
 
         TextView user = findViewById(R.id.bnv);
-        Bundle extras = getIntent().getExtras();
 
-        user.setText(Singelton.getNombreUsuario());
+        user.setText(user.getText().toString()+" "+Singelton.getNombreUsuario());
 
         Button añadir = findViewById(R.id.anadir);
         Button valoraciones = findViewById(R.id.valoraciones);
         Button misValoraciones = findViewById(R.id.misValoraciones);
+        Button pendientes = findViewById(R.id.pendientes);
+        Button busquedaUsuario = findViewById(R.id.buscarUsuario);
 
         añadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             Intent i = new Intent(getApplicationContext(),AnadirValoracion.class);
-            i.putExtra("id",id);
             startActivity(i);
             }
         });
@@ -38,7 +38,6 @@ public class MenuPrincipal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),Valoraciones.class);
-                i.putExtra("id",id);
                 startActivity(i);
             }
         });
@@ -47,7 +46,21 @@ public class MenuPrincipal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),MisValoraciones.class);
-                i.putExtra("id",id);
+                startActivity(i);
+            }
+        });
+        pendientes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),LibrosPendientes.class);
+                startActivity(i);
+            }
+        });
+
+        busquedaUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),BusquedaUsuario.class);
                 startActivity(i);
             }
         });

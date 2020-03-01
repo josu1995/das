@@ -9,6 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".BusquedaUsuario"></activity>
+        <activity android:name=".VerLibrosPendientes" />
+        <activity android:name=".AnadirLibroPendiente" />
+        <activity android:name=".LibrosPendientes" />
         <activity android:name=".MandarMail" />
         <activity android:name=".MisValoraciones" />
         <activity android:name=".Valoraciones" />
