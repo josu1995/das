@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".BusquedaUsuario">
-    
+    tools:context=".LibrosUsuario">
+
     <fragment
-        android:id="@+id/fragment"
-        android:name="com.example.myapplication.FragmentA"
+        android:id="@+id/fragmentB"
+        android:name="com.example.myapplication.FragmentB"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

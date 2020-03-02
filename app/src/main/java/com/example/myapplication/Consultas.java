@@ -80,5 +80,15 @@ public class Consultas {
 
     }
 
+    public static Cursor getUsuarios(String [] args,Bd GestorBD){
+        SQLiteDatabase bd  = GestorBD.getWritableDatabase();
+        return bd.query("USUARIOS",null,"IdUsuario!=?",args,null,null,null);
+    }
+
+    public static Cursor getLibrosUsuario(String [] args,Bd GestorBD){
+        SQLiteDatabase bd  = GestorBD.getWritableDatabase();
+        return bd.query("VALORACIONES",null,"IdUsuario=?",args,null,null,null);
+    }
+
 
 }
