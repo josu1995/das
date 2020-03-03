@@ -55,6 +55,7 @@ public class FragmentA extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        //Buscamos en la base de datos todos los usuario excepto el logeado
         final Bd GestorBD = new Bd(getActivity(),"biblioteca",null,3);
         String[] args = {Integer.toString(Singelton.getIdUsuario())};
         Cursor cu = Consultas.getUsuarios(args,GestorBD);
@@ -62,6 +63,7 @@ public class FragmentA extends Fragment {
             ids.add(cu.getInt(0));
             usuarios.add(cu.getString(1));
         }
+        //Mostramos los usuarios en una lista
         datos = usuarios.toArray(new String[usuarios.size()]);
         lv = (ListView) view.findViewById(R.id.listView);
         adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_expandable_list_item_1,datos);

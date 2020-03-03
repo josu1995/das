@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class Consultas {
+
      public static Cursor getLogin(String [] args ,Bd GestorBD){
         SQLiteDatabase bd  = GestorBD.getWritableDatabase();
         return bd.query("USUARIOS",null,"Nombre=? and Pass=?",args,null,null,null);

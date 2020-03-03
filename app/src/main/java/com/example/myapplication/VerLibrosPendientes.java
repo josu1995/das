@@ -23,7 +23,9 @@ public class VerLibrosPendientes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_libros_pendientes);
         ArrayList<String> lineas = new ArrayList<String>();
-
+        //Al crear la actividad abrimos el fichero
+        //En caso de que no este lo crearemos.
+        //Si lo hemos podido abrir cargaremos linea por linea los libros que tenemos apuntados como pendientes
         try {
             BufferedReader fichero = new BufferedReader(new InputStreamReader(openFileInput("libros.txt")));
             String linea = fichero.readLine();
@@ -45,6 +47,7 @@ public class VerLibrosPendientes extends AppCompatActivity {
             }
 
         }
+        //Añadiremos los libros a una lista que es la que se mostrara por pantalla.
         String[] arrayLineas = lineas.toArray(new String[lineas.size()]);
         ArrayAdapter eladaptador = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,arrayLineas);
         ListView lalista = (ListView) findViewById(R.id.miLista);

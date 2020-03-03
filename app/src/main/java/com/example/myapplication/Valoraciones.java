@@ -16,6 +16,9 @@ public class Valoraciones extends AppCompatActivity {
         ArrayList<String> nombreLibros = new ArrayList<String>();
         ArrayList<Double> valoraciones = new ArrayList<Double>();
 
+        //Buscaremos en base de datos todas las valoraciones que hay
+        //Por cada valoracion cogeremos su libro y su nota
+        //Si un libro esta valorado por mas de un usuario, se hara una media
         Cursor cu = Consultas.getValoraciones(GestorBD);
         while(cu.moveToNext()){
             int idLibro = cu.getInt(1);
@@ -38,7 +41,8 @@ public class Valoraciones extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_valoraciones);
-
+        //Añadiremos los libros a la lista personalizada
+        //Como nuestro ratingBar se muestra 5 estrellas haremos la nota que tiene ese libro entre 2
         String[] arrayLibros = nombreLibros.toArray(new String[nombreLibros.size()]);
         double [] d = new double[valoraciones.size()];
         for(int i =0;i<d.length;i++){

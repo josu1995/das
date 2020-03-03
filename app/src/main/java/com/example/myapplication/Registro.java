@@ -32,22 +32,26 @@ public class Registro extends AppCompatActivity {
         final EditText pass = findViewById(R.id.newPass);
         final EditText pass2 = findViewById(R.id.newPass2);
 
+        //Al darle al boton registrar se hacen una serie de comprobaciones
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Si alguno de los campos esta vacio mostramos un dialogo.
                 if(usuario.getText().toString().length() == 0 || pass.getText().toString().length() == 0 ){
                     DialogFragment dialogo = new AlertDialogDatos();
                     dialogo.show(getSupportFragmentManager(),"datos");
                     usuario.getText().clear();
                     pass.getText().clear();
                     pass2.getText().clear();
+                    //Si las contraseñas no coinciden mostramos un dialogo
                 }else if(!pass.getText().toString().equals(pass2.getText().toString())){
                     DialogFragment dialogo = new AlertDialogPass();
                     dialogo.show(getSupportFragmentManager(),"registro");
                     pass.getText().clear();
                     pass2.getText().clear();
                 }else{
+                    //Si las comprobaciones son correctas miramos que el usuario no este ya registrado, con
+                    //ese nombre de usuario
                     String[] args = {usuario.getText().toString(),};
                     Cursor cu = Consultas.getUserRegistro(args,GestorBD);
                     if(cu.moveToNext()) {
@@ -57,6 +61,7 @@ public class Registro extends AppCompatActivity {
                         pass.getText().clear();
                         pass2.getText().clear();
                     }else{
+                        //Si no esta registrado los añadimos a la base de datos y mostramos una notificacion
                         Consultas.registrarUsuario(usuario.getText().toString(), pass.getText().toString(),GestorBD);
 
                     NotificationManager elManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -79,9 +84,7 @@ public class Registro extends AppCompatActivity {
 
                     elManager.notify(1, elBuilder.build());
 
-
-
-
+                    //Volvemos a la pantalla de login
                     Intent i = new Intent(getApplicationContext(),Login.class);
                     startActivity(i);
                     finish();

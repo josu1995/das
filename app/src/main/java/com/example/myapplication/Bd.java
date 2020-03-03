@@ -14,6 +14,10 @@ public class Bd extends SQLiteOpenHelper {
     }
 
     @Override
+    //Tenemos 3 tablas
+    //Usuario donde tenemos un id como clave primaria , nombre y pass del usuario para logearse
+    //Libro donde guardaremos su id como clave primaria y el nombre de su libro
+    //Valoraciones donde tendremos la relacion entre usuario y libro con su valoracion
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS USUARIOS ('IdUsuario' INTEGER PRIMARY KEY AUTOINCREMENT  ,'Nombre' TEXT NOT NULL,'Pass' TEXT NOT NULL,UNIQUE('Nombre'))");
         db.execSQL("CREATE TABLE IF NOT EXISTS LIBRO  ('IdLibro' INTEGER PRIMARY KEY AUTOINCREMENT ,'NombreLibro' TEXT NOT NULL,UNIQUE('NombreLibro'))");

@@ -42,7 +42,7 @@ public class FragmentB extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
     }
-
+    //Recibimos un id de un usuario y miramos sus libros para mostrar
     public void hacerAlgo(int id) {
         libros = new ArrayList<String>();
         final Bd GestorBD = new Bd(getActivity(),"biblioteca",null,3);
@@ -59,6 +59,7 @@ public class FragmentB extends Fragment {
         }
 
         cu.close();
+        //Mostrar los libros por pantalla
         datos = libros.toArray(new String[libros.size()]);
         lv = (ListView) view.findViewById(R.id.listViewLibros);
         adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_expandable_list_item_1,datos);

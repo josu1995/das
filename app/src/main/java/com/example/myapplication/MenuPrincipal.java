@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ public class MenuPrincipal extends AppCompatActivity {
         Button pendientes = findViewById(R.id.pendientes);
         Button busquedaUsuario = findViewById(R.id.buscarUsuario);
 
+        //El menu principal donde podemos elegir que hacer en nuestra app
         añadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

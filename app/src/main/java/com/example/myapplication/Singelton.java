@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+//Clase singelton para guardar los datos del usuario logeado
 public class Singelton {
     private static  Singelton miUsuario;
     private static  String nombreUsuario;

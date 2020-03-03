@@ -28,7 +28,8 @@ public class Login extends AppCompatActivity {
         final EditText usuario = findViewById(R.id.usuario);
         final EditText pass = findViewById(R.id.password);
 
-
+        //Si el usuario introduce bien su usuario y contraseña entrara al menu principal
+        //si le saldra un dialogo
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +53,7 @@ public class Login extends AppCompatActivity {
 
             }
         });
-
+        //Ir a la opcion de registrarse
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

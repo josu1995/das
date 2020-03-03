@@ -23,6 +23,7 @@ public class MandarMail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mandar_mail);
 
+        //Recogemos las valoraciones del usuario
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String usuario= extras.getString("user");
@@ -37,10 +38,11 @@ public class MandarMail extends AppCompatActivity {
         final EditText emailE = findViewById(R.id.email);
         final EditText asuntoE = findViewById(R.id.asunto);
 
+        //Añadimos los nombre de los libros y su valoracion sobre 10 a el texto que mandaremos
         for (int i =0;i<d.length;i++){
             texto = texto + "Libro: " + arrayLibros[i] + " valoracion: "+ d[i]*2 +"\n";
         }
-
+        //Enviaremos las valoracion por correo
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

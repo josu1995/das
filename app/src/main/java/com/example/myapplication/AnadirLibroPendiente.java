@@ -28,7 +28,7 @@ public class AnadirLibroPendiente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anadir_libro_pendiente);
-
+        //Miramos si el fichero esta creado, si no lo creamos
         try {
             BufferedReader fichero = new BufferedReader(new InputStreamReader(openFileInput("libros.txt")));
             fichero.close();
@@ -47,7 +47,7 @@ public class AnadirLibroPendiente extends AppCompatActivity {
 
         Button libro = findViewById(R.id.anadirLibroPendiente);
         final EditText lib = findViewById(R.id.lib);
-
+        //Al añadir lo que hacemos es recoger lo que habia en el fichero y le añadimos al final el nuevo libro
         libro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +56,7 @@ public class AnadirLibroPendiente extends AppCompatActivity {
                     String linea = fichero.readLine();
                     String texto = "";
                     while (linea!=null){
+                        //Si el libro esta dentro del fichero no lo añadimos y mostramos un dialogo
                         if(linea.equalsIgnoreCase(lib.getText().toString())) {
                             enc = true;
                             DialogFragment dialogo = new AlertDialogLibroPendiente();
@@ -68,6 +69,7 @@ public class AnadirLibroPendiente extends AppCompatActivity {
 
                     }
                     fichero.close();
+                    //Si no esta lo añadimos al final y mostramos una notificacion
                     if(!enc) {
                         OutputStreamWriter fichero1 = new OutputStreamWriter(openFileOutput("libros.txt", Context.MODE_PRIVATE));
                         fichero1.append(texto+lib.getText().toString().toUpperCase());

@@ -16,7 +16,8 @@ public class LibrosPendientes extends AppCompatActivity {
 
         Button anadirLibro = findViewById(R.id.anadirLibroPendiente);
         Button verLibro = findViewById(R.id.librosPendientes);
-
+        //Menu donde pondemos añadir un libro a nuestra lista de pendientes
+        //O mirar nuestra lista de pendientes
         anadirLibro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

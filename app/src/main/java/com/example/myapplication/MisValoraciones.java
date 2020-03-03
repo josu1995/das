@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,7 +25,7 @@ public class MisValoraciones extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ArrayList<String> nombreLibros = new ArrayList<String>();
         ArrayList<Double> valoraciones = new ArrayList<Double>();
-
+        //Buscamos en base de datos las valoraciones que tiene el usuario logeado
         String [] args = {Integer.toString(id)};
         Cursor cu = Consultas.getValoracionesUsuario(args,GestorBD);
         while (cu.moveToNext()){
@@ -39,9 +40,13 @@ public class MisValoraciones extends AppCompatActivity {
             valoraciones.add(val);
         }
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mis_valoraciones);
         Button email = findViewById(R.id.botonEmail);
+
+        DialogFragment dialogo = new AlertDialogEditarValoracion();
+        dialogo.show(getSupportFragmentManager(),"editarValoracion");
 
 
         arrayLibros = nombreLibros.toArray(new String[nombreLibros.size()]);
@@ -54,6 +59,7 @@ public class MisValoraciones extends AppCompatActivity {
         AdaptadorListView eladap= new AdaptadorListView(getApplicationContext(),arrayLibros,d);
         libros.setAdapter(eladap);
 
+        //Cuando se pulsa una valoracion un rato iremos ala pantalla de modificar valoracion
         libros.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long numero) {
@@ -64,7 +70,7 @@ public class MisValoraciones extends AppCompatActivity {
                 return false;
             }
         });
-
+        //Al darle al boton de email iremos a una nueva actividad para mandar un correo
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

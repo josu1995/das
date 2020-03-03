@@ -25,7 +25,7 @@ public class CambiarValoracion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cambiar_valoracion);
-
+        //Regogemos los datos del usuario
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String usuario= extras.getString("user");
@@ -37,19 +37,21 @@ public class CambiarValoracion extends AppCompatActivity {
         nombre.setText(nombreLibro);
         nombre.setEnabled(false);
         final EditText valoracion = findViewById(R.id.cambiarValoracion);
-
+        //Hacemos varias comprobaciones antes de modificar la valoracion
         cambiar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Si el usuario introduce algo que no sea numero o numero coma/punto numero mostrara un dialog
                 if (valoracion.getText().toString().matches("^[0-9]+([,.][0-9]+)?$") && valoracion.getText().toString().length() > 0) {
                     double val = Double.parseDouble(valoracion.getText().toString().replace(",", "."));
-                    Log.i("AA", val + "");
+                    //Si el numero no estar entre 0 y 10 mostrara un dialogo
                     if (val < 0 || val > 10) {
-                        //Error
                         DialogFragment dialogo = new AlertDialogValoracion();
                         dialogo.show(getSupportFragmentManager(), "cambiarValoracion");
                         valoracion.getText().clear();
                     } else {
+                        //Si la valoracion es correcta la modificamos en la base de datos
+                        //Y mostramos una notificacion
                         String[] args = {Integer.toString(id), Integer.toString(idLibro)};
                         Consultas.updateValoracion(args, Double.parseDouble(valoracion.getText().toString()), GestorBD);
 

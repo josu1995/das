@@ -29,25 +29,27 @@ public class AnadirValoracion extends AppCompatActivity {
         Button añadir = findViewById(R.id.anadirAnadir);
         final EditText nombre = findViewById(R.id.anadirNombreLibro);
         final EditText valoracion = findViewById(R.id.cambiarValoracion);
-
+        //Hacemos varias comprobaciones antes de añadir la valoracion
         añadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nombre.getText().toString();
+                //Si el usuario introduce algo que no sea numero o numero coma/punto numero mostrara un dialog
                 if(valoracion.getText().toString().matches("^[0-9]+([,.][0-9]+)?$") && valoracion.getText().toString().length() > 0) {
                      val = Double.parseDouble(valoracion.getText().toString().replace(",", "."));
                     if (val < 0 || val > 10) {
-                        //Error
                         DialogFragment dialogo = new AlertDialogValoracion();
                         dialogo.show(getSupportFragmentManager(), "valoracion");
                         valoracion.getText().clear();
                     } else {
+                        //Obtenemos el id del libro que hemos introducido si no existe es que nadie lo ha valorado
                         String[] args = {nombre.getText().toString().toUpperCase()};
                         Cursor cu = Consultas.getLibro(args, GestorBD);
                         if (cu.moveToNext()) {
                             idLibro = cu.getInt(0);
                             cu.close();
                             String[] argumentos = {Integer.toString(id), Integer.toString(idLibro)};
+                            //Como el libro existe buscamos haber si ese usuario con ese libro tiene una valoracion
+                            //Si lo tiene le mostramos un dialogo
                             Cursor cur = Consultas.getValoracionUsuarioLibro(argumentos, GestorBD);
                             if (cur.moveToNext()) {
                                 DialogFragment dialogo = new AlertDialogNewValoracion();
