@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -22,6 +23,25 @@ public class BusquedaUsuario extends AppCompatActivity implements FragmentA.list
     //Si esta horizontal se mostraran los usuarios y sus libros
     @Override
     public void seleccionarElemento(int id) {
+
+        int orientation = getResources().getConfiguration().orientation;
+
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+            FragmentB elotro=(FragmentB) getSupportFragmentManager().
+                    findFragmentById(R.id.fragmentLibros);
+            elotro.hacerAlgo(id);
+
+        }
+        else
+        {
+            Log.i("DEBUG","AA");
+            Intent i= new Intent(this,LibrosUsuario.class);
+            i.putExtra("idLibro",Integer.toString(id));
+            startActivity(i);
+
+        }
+        /*
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentLibros)!=null){
             //EL OTRO FRAGMENT EXISTE
             FragmentB elotro=(FragmentB) getSupportFragmentManager().
@@ -29,10 +49,11 @@ public class BusquedaUsuario extends AppCompatActivity implements FragmentA.list
             elotro.hacerAlgo(id);
         }
         else{
+            Log.i("DEBUG","AA");
             Intent i= new Intent(this,LibrosUsuario.class);
             i.putExtra("idLibro",Integer.toString(id));
             startActivity(i);
-        }
+        }*/
     }
 }
 

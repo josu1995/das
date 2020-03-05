@@ -45,8 +45,13 @@ public class FragmentB extends Fragment {
     //Recibimos un id de un usuario y miramos sus libros para mostrar
     public void hacerAlgo(int id) {
         libros = new ArrayList<String>();
+
+        Log.i("DEBUG", "Args: "+(getActivity() == null));
+
+
         final Bd GestorBD = new Bd(getActivity(),"biblioteca",null,3);
         String[] args = {Integer.toString(id)};
+
         Cursor cu = Consultas.getLibrosUsuario(args,GestorBD);
         while (cu.moveToNext()){
             int m= cu.getInt(1);
@@ -59,6 +64,8 @@ public class FragmentB extends Fragment {
         }
 
         cu.close();
+
+
         //Mostrar los libros por pantalla
         datos = libros.toArray(new String[libros.size()]);
         lv = (ListView) view.findViewById(R.id.listViewLibros);
