@@ -2,25 +2,11 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/diccionario"
-        android:title="Diccionario"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/ajustes"
-        android:title="Ajustes"
-        app:showAsAction="never"/>
 
     <item
-        android:id="@+id/comprobar"
-        android:title="Comprobar"
-        android:icon="@android:drawable/ic_menu_view"
-        app:showAsAction="withText"/>
-
-    <item
-        android:id="@+id/corregir"
-        android:title="Corregir"
-        android:icon="@android:drawable/ic_menu_agenda"
+        android:id="@+id/salir"
+        android:title=""
+        android:icon="@android:drawable/ic_menu_revert"
         app:showAsAction="always|withText"/>
 
 </menu>

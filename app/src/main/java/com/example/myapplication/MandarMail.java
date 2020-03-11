@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +21,8 @@ public class MandarMail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mandar_mail);
+        Toolbar barra = findViewById(R.id.toolbar);
+        setSupportActionBar(barra);
 
         //Recogemos las valoraciones del usuario
         Bundle extras = getIntent().getExtras();
@@ -31,8 +32,7 @@ public class MandarMail extends AppCompatActivity {
             arrayLibros = extras.getStringArray("nombreLibros");
         }
 
-       /* Toolbar barra = findViewById(R.id.toolbar);
-        setSupportActionBar(barra);*/
+
 
         Button enviar = findViewById(R.id.enviar);
         final EditText emailE = findViewById(R.id.email);
@@ -58,7 +58,7 @@ public class MandarMail extends AppCompatActivity {
 
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
@@ -66,10 +66,9 @@ public class MandarMail extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        /*switch (id){
-
-        }
+        Intent i = new Intent(getApplicationContext(),Login.class);
+        startActivity(i);
+        finish();
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 }

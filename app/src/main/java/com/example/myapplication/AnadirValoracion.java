@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.ContentValues;
@@ -9,6 +11,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,11 +28,16 @@ public class AnadirValoracion extends AppCompatActivity {
         setContentView(R.layout.activity_anadir_valoracion);
 
         final Bd GestorBD = new Bd(this,"biblioteca",null,3);
-
-
+        Toolbar barra = findViewById(R.id.toolbar);
+        setSupportActionBar(barra);
         Button añadir = findViewById(R.id.anadirAnadir);
         final EditText nombre = findViewById(R.id.anadirNombreLibro);
         final EditText valoracion = findViewById(R.id.cambiarValoracion);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            nombre.setText(extras.getString("libro"));
+        }
         //Hacemos varias comprobaciones antes de añadir la valoracion
         añadir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,5 +97,18 @@ public class AnadirValoracion extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent i = new Intent(getApplicationContext(),Login.class);
+        startActivity(i);
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 }

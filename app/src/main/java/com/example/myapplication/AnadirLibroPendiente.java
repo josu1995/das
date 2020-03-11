@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.DialogFragment;
 
@@ -12,6 +14,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +32,8 @@ public class AnadirLibroPendiente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anadir_libro_pendiente);
+        Toolbar barra = findViewById(R.id.toolbar);
+        setSupportActionBar(barra);
         //Miramos si el fichero esta creado, si no lo creamos
         try {
             BufferedReader fichero = new BufferedReader(new InputStreamReader(openFileInput("libros.txt")));
@@ -104,5 +110,18 @@ public class AnadirLibroPendiente extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent i = new Intent(getApplicationContext(),Login.class);
+        startActivity(i);
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 }

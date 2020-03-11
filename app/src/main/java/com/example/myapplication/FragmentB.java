@@ -46,9 +46,6 @@ public class FragmentB extends Fragment {
     public void hacerAlgo(int id) {
         libros = new ArrayList<String>();
 
-        Log.i("DEBUG", "Args: "+(getActivity() == null));
-
-
         final Bd GestorBD = new Bd(getActivity(),"biblioteca",null,3);
         String[] args = {Integer.toString(id)};
 

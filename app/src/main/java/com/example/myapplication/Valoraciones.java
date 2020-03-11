@@ -1,10 +1,15 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -41,6 +46,8 @@ public class Valoraciones extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_valoraciones);
+        Toolbar barra = findViewById(R.id.toolbar);
+        setSupportActionBar(barra);
         //Añadiremos los libros a la lista personalizada
         //Como nuestro ratingBar se muestra 5 estrellas haremos la nota que tiene ese libro entre 2
         String[] arrayLibros = nombreLibros.toArray(new String[nombreLibros.size()]);
@@ -56,5 +63,18 @@ public class Valoraciones extends AppCompatActivity {
 
 
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent i = new Intent(getApplicationContext(),Login.class);
+        startActivity(i);
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 }

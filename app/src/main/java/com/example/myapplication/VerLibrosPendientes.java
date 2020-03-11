@@ -1,10 +1,15 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +27,8 @@ public class VerLibrosPendientes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_libros_pendientes);
+        Toolbar barra = findViewById(R.id.toolbar);
+        setSupportActionBar(barra);
         ArrayList<String> lineas = new ArrayList<String>();
         //Al crear la actividad abrimos el fichero
         //En caso de que no este lo crearemos.
@@ -31,7 +38,6 @@ public class VerLibrosPendientes extends AppCompatActivity {
             String linea = fichero.readLine();
             while (linea!=null){
                 lineas.add(linea);
-                Log.i("AA",linea);
                 linea = fichero.readLine();
             }
             fichero.close();
@@ -52,5 +58,18 @@ public class VerLibrosPendientes extends AppCompatActivity {
         ArrayAdapter eladaptador = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,arrayLineas);
         ListView lalista = (ListView) findViewById(R.id.miLista);
         lalista.setAdapter(eladaptador);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent i = new Intent(getApplicationContext(),Login.class);
+        startActivity(i);
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="colorDeFondo" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:textColor">#F98C00</item>
+        <item name="android:textStyle">bold</item>
+        <item name ="android:background"></item>
+    </style>
+
+
 </resources>

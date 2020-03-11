@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.DialogFragment;
 
@@ -12,11 +14,14 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 public class CambiarValoracion extends AppCompatActivity {
+
     Bd GestorBD = new Bd(this,"biblioteca",null,3);
     int id=Singelton.getIdUsuario();
     int idLibro=0;
@@ -25,6 +30,8 @@ public class CambiarValoracion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cambiar_valoracion);
+        Toolbar barra = findViewById(R.id.toolbar);
+        setSupportActionBar(barra);
         //Regogemos los datos del usuario
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -86,5 +93,18 @@ public class CambiarValoracion extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent i = new Intent(getApplicationContext(),Login.class);
+        startActivity(i);
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 }
