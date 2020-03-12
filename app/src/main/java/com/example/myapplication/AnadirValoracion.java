@@ -3,12 +3,18 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -82,11 +88,27 @@ public class AnadirValoracion extends AppCompatActivity {
                             idLibro = c.getInt(0);
                             c.close();
 
-                            //Añadimos la valoracion
+                            //Añadimos la valoracion y mostramos una notificacion
                             Consultas.anadirValoracion(id, idLibro, Double.toString(val), GestorBD);
-                            Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
-                            startActivity(i);
-                            finish();
+                            NotificationManager elManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getBaseContext(), "ValoracionOk");
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                NotificationChannel elCanal = new NotificationChannel("ValoracionOk", "NombreCanal", NotificationManager.IMPORTANCE_HIGH);
+                                elCanal.setDescription("Descripción del canal");
+                                elCanal.enableLights(true);
+                                elCanal.setLightColor(Color.RED);
+                                elCanal.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+                                elCanal.enableVibration(true);
+                                elManager.createNotificationChannel(elCanal);
+                            }
+                            elBuilder.setSmallIcon(android.R.drawable.stat_sys_warning)
+                                    .setContentTitle("Libro añadido")
+                                    .setContentText("El libro: "+nombre.getText().toString() +" se añadió correctamente.")
+                                    .setVibrate(new long[]{0, 1000, 500, 1000})
+                                    .setAutoCancel(true);
+
+                            elManager.notify(1, elBuilder.build());
                         }
                     }
                 }else{

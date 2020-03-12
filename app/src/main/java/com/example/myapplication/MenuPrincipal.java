@@ -34,6 +34,7 @@ public class MenuPrincipal extends AppCompatActivity {
         Button busquedaUsuario = findViewById(R.id.buscarUsuario);
         Button marcador = findViewById(R.id.marcador);
 
+        //toast para dar la bienvenida a el usuario
         Toast.makeText(getApplication().getApplicationContext(),"Bienvenido "+Singelton.getNombreUsuario(),Toast.LENGTH_LONG).show();
 
         //El menu principal donde podemos elegir que hacer en nuestra app

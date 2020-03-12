@@ -50,7 +50,7 @@ public class CambiarValoracion extends AppCompatActivity {
             public void onClick(View v) {
                 //Si el usuario introduce algo que no sea numero o numero coma/punto numero mostrara un dialog
                 if (valoracion.getText().toString().matches("^[0-9]+([,.][0-9]+)?$") && valoracion.getText().toString().length() > 0) {
-                    double val = Double.parseDouble(valoracion.getText().toString().replace(",", "."));
+                    double val =Double.parseDouble(valoracion.getText().toString().replace(",", "."));
                     //Si el numero no estar entre 0 y 10 mostrara un dialogo
                     if (val < 0 || val > 10) {
                         DialogFragment dialogo = new AlertDialogValoracion();
@@ -60,7 +60,7 @@ public class CambiarValoracion extends AppCompatActivity {
                         //Si la valoracion es correcta la modificamos en la base de datos
                         //Y mostramos una notificacion
                         String[] args = {Integer.toString(id), Integer.toString(idLibro)};
-                        Consultas.updateValoracion(args, Double.parseDouble(valoracion.getText().toString()), GestorBD);
+                        Consultas.updateValoracion(args, val, GestorBD);
 
                         NotificationManager elManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getBaseContext(), "CambioValoracion");
@@ -82,7 +82,7 @@ public class CambiarValoracion extends AppCompatActivity {
 
                         elManager.notify(1, elBuilder.build());
 
-                        Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                        Intent i = new Intent(getApplicationContext(), MisValoraciones.class);
                         startActivity(i);
                         finish();
                     }

@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment;
 public class AlertDialogLibroPendiente extends DialogFragment {
     @NonNull
     @Override
+    //Dialogo para mostrar un mensaje para informar e ir a una nueva actividad
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
@@ -23,6 +24,7 @@ public class AlertDialogLibroPendiente extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 Intent i = new Intent(getContext().getApplicationContext(),LibrosPendientes.class);
                 startActivity(i);
+                getActivity().finish();
 
             }
         });

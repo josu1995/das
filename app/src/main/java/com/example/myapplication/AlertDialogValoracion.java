@@ -7,7 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
+//Dialogo para mostrar un mensaje para informar
 public class AlertDialogValoracion extends DialogFragment {
 
     @NonNull

@@ -54,7 +54,7 @@ public class MisValoraciones extends AppCompatActivity {
         DialogFragment dialogo = new AlertDialogEditarValoracion();
         dialogo.show(getSupportFragmentManager(),"editarValoracion");
 
-
+        //pasamos los arraylist a listas para que nuestra listview personalizada la pueda recoger
         arrayLibros = nombreLibros.toArray(new String[nombreLibros.size()]);
         d = new double[valoraciones.size()];
         for(int i =0;i<d.length;i++){
@@ -73,6 +73,7 @@ public class MisValoraciones extends AppCompatActivity {
                 i.putExtra("NombreLibro",((TextView)view.findViewById(R.id.nombreLibro)).getText().toString());
                 i.putExtra("idLibro",idLibros.get(position));
                 startActivity(i);
+                finish();
                 return false;
             }
         });
@@ -84,6 +85,7 @@ public class MisValoraciones extends AppCompatActivity {
                 i.putExtra("valoracion",d);
                 i.putExtra("nombreLibros",arrayLibros);
                 startActivity(i);
+                finish();
             }
         });
     }

@@ -23,7 +23,6 @@ public class LibrosUsuario extends AppCompatActivity {
         FragmentB elotro=(FragmentB) getSupportFragmentManager().findFragmentById(R.id.fragmentB);
         int informacion= Integer.parseInt(getIntent().getStringExtra("idLibro"));
 
-        Log.i("DEBUG", "onCreate 2a actividad");
 
         elotro.hacerAlgo(informacion);
     }

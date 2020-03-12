@@ -76,7 +76,7 @@ public class AnadirLibroPendiente extends AppCompatActivity {
                     }
                     fichero.close();
                     //Si no esta lo añadimos al final y mostramos una notificacion
-                    if(!enc) {
+                    if(!enc){
                         OutputStreamWriter fichero1 = new OutputStreamWriter(openFileOutput("libros.txt", Context.MODE_PRIVATE));
                         fichero1.append(texto+lib.getText().toString().toUpperCase());
                         fichero1.close();

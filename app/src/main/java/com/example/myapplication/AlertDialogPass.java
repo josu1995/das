@@ -12,6 +12,7 @@ public class AlertDialogPass extends DialogFragment {
 
     @NonNull
     @Override
+    //Dialogo para mostrar un mensaje para informar
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());

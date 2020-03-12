@@ -14,5 +14,10 @@
         <item name ="android:background"></item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#FFFFFF</item>
+        <item name="colorControlActivated">#F98C00</item>
+    </style>
+
 
 </resources>

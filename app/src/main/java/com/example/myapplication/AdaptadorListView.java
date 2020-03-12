@@ -16,6 +16,7 @@ public class AdaptadorListView extends BaseAdapter {
     private String[] datos;
 
     private double[] puntuaciones;
+    //constructura para crear la listview personalizado
     public AdaptadorListView(Context pcontext, String[] pdatos, double[]ppuntuaciones) {
         contexto = pcontext;
         datos = pdatos;
@@ -38,6 +39,7 @@ public class AdaptadorListView extends BaseAdapter {
         return position;
     }
 
+    //metodo para meter un xml a el listview
     @Override
     public View getView(int i, View view, ViewGroup parent) {
         view=inflater.inflate(R.layout.listado,null);

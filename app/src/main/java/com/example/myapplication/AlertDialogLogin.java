@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment;
 public class AlertDialogLogin extends DialogFragment {
     @NonNull
     @Override
+    //Dialogo para mostrar un mensaje para informar y si damos al boton de Registrar iremos a la parte de registrarnos
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());

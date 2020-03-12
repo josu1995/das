@@ -10,8 +10,12 @@
     <fragment
         android:id="@+id/fragmentB"
         android:name="com.example.myapplication.FragmentB"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="411dp"
+        android:layout_height="620dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

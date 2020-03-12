@@ -37,35 +37,42 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 
+        //Cuando pinchamos en el boton, hacemos que se abra un dialog que nos mandara
+        //a la parte de añadir valoracion
+        Button finalizar = findViewById(R.id.finalizarLibro);
 
-         Button finalizar = findViewById(R.id.finalizarLibro);
-
-            finalizar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogFragment dialogo = new AlertDialogFinalizarLibro();
-                    dialogo.show(getSupportFragmentManager(),"finalizarLibro");
-
-
-                }
-            });
-
+        finalizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialogo = new AlertDialogFinalizarLibro();
+                dialogo.show(getSupportFragmentManager(),"finalizarLibro");
+            }
+        });
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
-
-
-
-
+    public static class SettingsFragment extends PreferenceFragmentCompat implements
+            SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
+        //Cargamos la configuracion de las preferencias
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
-
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+        @Override
+        public void onPause() {
+            super.onPause();
+            getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
 
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
+        }
     }
 
 
@@ -83,5 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
         finish();
         return super.onOptionsItemSelected(item);
     }
+
+
 }
 
