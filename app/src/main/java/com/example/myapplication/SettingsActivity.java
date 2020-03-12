@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -32,37 +33,43 @@ public class SettingsActivity extends AppCompatActivity {
                 .commit();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            actionBar.setTitle("LYBRETA");
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
-    }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey);
-            Button finalizar = getActivity().findViewById(R.id.finalizarLibro);
+
+         Button finalizar = findViewById(R.id.finalizarLibro);
 
             finalizar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DialogFragment dialogo = new AlertDialogFinalizarLibro();
-                    dialogo.show(getFragmentManager(),"finalizarLibro");
+                    dialogo.show(getSupportFragmentManager(),"finalizarLibro");
+
+
                 }
             });
+
+    }
+
+    public static class SettingsFragment extends PreferenceFragmentCompat {
+
+
+
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+
+
         }
-    }
 
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.i("AA","save");
-        super.onSaveInstanceState(savedInstanceState);
 
 
     }
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.i("AA","restore");
-        super.onRestoreInstanceState(savedInstanceState);
 
-    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
@@ -77,3 +84,4 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
