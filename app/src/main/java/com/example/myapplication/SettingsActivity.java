@@ -57,12 +57,14 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
         }
-
+        ///Metodo que nos permite actualizar las preferencias cuando son modificadas
         @Override
         public void onResume() {
             super.onResume();
             getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         }
+        //Metodo que cuando la actividad se pone en pausa desregistra las preferencias para que cuando se vuelva las coga otra vez
+        //pos si se han modificado
         @Override
         public void onPause() {
             super.onPause();
