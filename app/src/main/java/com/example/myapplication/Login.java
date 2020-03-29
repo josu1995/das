@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -10,18 +11,28 @@ import android.database.Cursor;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+
 public class Login extends AppCompatActivity {
+    private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         final Bd GestorBD = new Bd(this,"biblioteca",null,3);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         //toast para dar la bienvenida a la aplicaciion
         Toast.makeText(getApplication().getApplicationContext(),"Gracias por usar esta LYBRETA",Toast.LENGTH_LONG).show();
@@ -37,7 +48,28 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] args = {usuario.getText().toString(),pass.getText().toString()};
+                firebaseAuth.signInWithEmailAndPassword(usuario.getText().toString(),pass.getText().toString()).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            String[] args = {usuario.getText().toString(),pass.getText().toString()};
+                            Cursor cu = Consultas.getLogin(args,GestorBD);
+                            cu.moveToNext();
+                            Singelton.setNombreUsuario(usuario.getText().toString());
+                            Singelton.setIdUsuario(cu.getInt(0));
+                            Log.i("AAA",cu.getInt(0)+"");
+                            Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                            startActivity(i);
+                            finish();
+                        }else{
+                            usuario.getText().clear();
+                            pass.getText().clear();
+                            DialogFragment dialogo = new AlertDialogLogin();
+                            dialogo.show(getSupportFragmentManager(),"login");
+                        }
+                    }
+                });
+                /*String[] args = {usuario.getText().toString(),pass.getText().toString()};
                 Cursor cu = Consultas.getLogin(args,GestorBD);
                 if(cu.moveToNext()){
                     Singelton.setNombreUsuario(usuario.getText().toString());
@@ -52,11 +84,14 @@ public class Login extends AppCompatActivity {
                     DialogFragment dialogo = new AlertDialogLogin();
                     dialogo.show(getSupportFragmentManager(),"login");
                     cu.close();
-                }
+                }*/
+
 
 
             }
         });
+
+
         //Ir a la opcion de registrarse
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
