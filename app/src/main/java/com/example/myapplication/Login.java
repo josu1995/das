@@ -57,8 +57,8 @@ public class Login extends AppCompatActivity {
                             cu.moveToNext();
                             Singelton.setNombreUsuario(usuario.getText().toString());
                             Singelton.setIdUsuario(cu.getInt(0));
-                            Log.i("AAA",cu.getInt(0)+"");
-                            Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                            Intent i = new Intent(getApplicationContext(), FotosLibros.class);
+                            //Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
                             startActivity(i);
                             finish();
                         }else{
