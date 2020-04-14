@@ -15,7 +15,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class Valoraciones extends AppCompatActivity {
-    Bd GestorBD = new Bd(this,"biblioteca",null,3);
+    Bd GestorBD = new Bd(this,"biblioteca",null,4);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ArrayList<String> nombreLibros = new ArrayList<String>();
@@ -59,9 +59,6 @@ public class Valoraciones extends AppCompatActivity {
         ListView libros = findViewById(R.id.listadoLibros);
         AdaptadorListView eladap= new AdaptadorListView(getApplicationContext(),arrayLibros,d);
         libros.setAdapter(eladap);
-
-
-
 
     }
     @Override

@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,25 +15,32 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.FileDownloadTask;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+
 
 public class FotosLibros extends AppCompatActivity {
+    Bd GestorBD = new Bd(this,"biblioteca",null,4);
     private static final int CODIGO_FOTO = 131 ;
     private static final int CODIGO_GALERIA = 130;
     private StorageReference mStorageRef;
     ImageView elImageView;
     Uri imagenSeleccionada = null;
     Bitmap laminiatura = null;
+    ProgressDialog mProgressDialog;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +48,23 @@ public class FotosLibros extends AppCompatActivity {
         setContentView(R.layout.activity_fotos_libros);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         Button elegir = findViewById(R.id.elegirFoto);
         Button movil = findViewById(R.id.fotoMovil);
         Button subir = findViewById(R.id.subirFoto);
         elImageView = findViewById(R.id.foto);
+        mProgressDialog = new ProgressDialog(this);
+
+        mAdView.setAdListener(new AdListener(){
+
+
+
+
+        });
 
         elegir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,26 +91,57 @@ public class FotosLibros extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(laminiatura != null){
-                    Log.i("AAA","lamini");
-                }else if(imagenSeleccionada != null){
-                    Log.i("AAA","img");
-                }else{
-                    Log.i("AAA","ninguna");
-                    //descargar
-                    StorageReference ref = mStorageRef.child("nombre.jpg");
-                    ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task){
-                            elImageView.setImageURI(task.getResult());
+                    mProgressDialog.setTitle("Subiendo...");
+                    mProgressDialog.setMessage("La foto se esta subiendo.");
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    laminiatura.compress(Bitmap.CompressFormat.JPEG,100,baos);
+
+                    byte[] datos = baos.toByteArray();
+                    String nombre =laminiatura.getGenerationId()+".jpg";
+                    StorageReference filePath = mStorageRef.child(nombre);
+                    UploadTask uploadTask = filePath.putBytes(datos);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
+                        public void onFailure(@NonNull Exception exception) {
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot){
+                            Consultas.registrarUri(nombre,GestorBD);
+                            mProgressDialog.dismiss();
+                            Toast.makeText(FotosLibros.this,"La foto se subió correctamente",Toast.LENGTH_SHORT).show();
 
                         }
                     });
 
+                }else if(imagenSeleccionada != null){
+                    mProgressDialog.setTitle("Subiendo...");
+                    mProgressDialog.setMessage("La foto se esta subiendo.");
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
+
+                    String nombre =imagenSeleccionada.getLastPathSegment()+".jpg";
+                    Log.i("AAA",imagenSeleccionada.getLastPathSegment());
+                    StorageReference filePath = mStorageRef.child(nombre);
+                    filePath.putFile(imagenSeleccionada).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Consultas.registrarUri(nombre,GestorBD);
+                            mProgressDialog.dismiss();
+                            Toast.makeText(FotosLibros.this,"La foto se subió correctamente",Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                        }
+                    });
+
+                }else{
+                    Toast.makeText(FotosLibros.this,"Seleccione o saque una foto",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -102,21 +153,6 @@ public class FotosLibros extends AppCompatActivity {
             laminiatura=null;
             imagenSeleccionada = data.getData();
             elImageView.setImageURI(imagenSeleccionada);
-            String nombre =imagenSeleccionada.getLastPathSegment()+".jpg";
-            Log.i("AAA",imagenSeleccionada.getLastPathSegment());
-            StorageReference filePath = mStorageRef.child(nombre);
-            filePath.putFile(imagenSeleccionada).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(FotosLibros.this,"La foto se subió correctamente",Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Log.i("AAA",exception+"");
-                }
-            });
-
         }
 
         if (requestCode == CODIGO_FOTO && resultCode == RESULT_OK) {
@@ -124,27 +160,7 @@ public class FotosLibros extends AppCompatActivity {
             Bundle extras = data.getExtras();
             laminiatura = (Bitmap) extras.get("data");
             elImageView.setImageBitmap(laminiatura);
-            //laminiatura.getGenerationId();
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            laminiatura.compress(Bitmap.CompressFormat.JPEG,100,baos);
-
-            byte[] datos = baos.toByteArray();
-
-            String nombre = "asdasdsad.jpg";
-            StorageReference filePath = mStorageRef.child(laminiatura.getGenerationId()+".jpg");
-            UploadTask uploadTask = filePath.putBytes(datos);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot){
-
-
-                }
-            });
         }
     }
 }

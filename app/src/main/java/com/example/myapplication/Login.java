@@ -4,6 +4,10 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.work.BackoffPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 
 import android.content.Intent;
@@ -24,13 +28,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
+import java.util.concurrent.TimeUnit;
+
 public class Login extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        final Bd GestorBD = new Bd(this,"biblioteca",null,3);
+        final Bd GestorBD = new Bd(this,"biblioteca",null,4);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -38,6 +44,13 @@ public class Login extends AppCompatActivity {
         Toast.makeText(getApplication().getApplicationContext(),"Gracias por usar esta LYBRETA",Toast.LENGTH_LONG).show();
         Button login = findViewById(R.id.login);
         Button registro = findViewById(R.id.newRegistro);
+
+        /*PeriodicWorkRequest trabajoRepetitivo =
+                new PeriodicWorkRequest.Builder(Tarea.class,15, TimeUnit.MINUTES)
+                        .build();
+
+        WorkManager.getInstance(this).enqueue(trabajoRepetitivo);*/
+
 
 
         final EditText usuario = findViewById(R.id.usuario);
@@ -57,8 +70,8 @@ public class Login extends AppCompatActivity {
                             cu.moveToNext();
                             Singelton.setNombreUsuario(usuario.getText().toString());
                             Singelton.setIdUsuario(cu.getInt(0));
-                            Intent i = new Intent(getApplicationContext(), FotosLibros.class);
-                            //Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                            //Intent i = new Intent(getApplicationContext(), Mapa.class);
+                            Intent i = new Intent(getApplicationContext(), ListadoFotos.class);
                             startActivity(i);
                             finish();
                         }else{

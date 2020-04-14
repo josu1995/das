@@ -29,7 +29,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Registro extends AppCompatActivity {
-    Bd GestorBD = new Bd(this,"biblioteca",null,3);
+    Bd GestorBD = new Bd(this,"biblioteca",null,4);
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
 

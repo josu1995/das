@@ -26,6 +26,14 @@ public class Consultas {
         bd.insert("USUARIOS", null, nuevo);
         bd.close();
     }
+    //Añadir URI
+    public static void registrarUri(String uri,Bd GestorBD){
+        SQLiteDatabase bd  = GestorBD.getWritableDatabase();
+        ContentValues nuevo = new ContentValues();
+        nuevo.put("NombreUri",uri);
+        bd.insert("URIS",null,nuevo);
+        bd.close();
+    }
 
     //Buscar un libro por su nombre
     public static Cursor getLibro(String [] args ,Bd GestorBD){
@@ -68,6 +76,12 @@ public class Consultas {
     public static Cursor getValoraciones(Bd GestorBD){
         SQLiteDatabase bd  = GestorBD.getWritableDatabase();
         return bd.query("VALORACIONES",null,null,null,null,null,null);
+    }
+
+    //Obtener las uris
+    public static Cursor getUris(Bd GestorBD){
+        SQLiteDatabase bd  = GestorBD.getWritableDatabase();
+        return bd.query("URIS",null,null,null,null,null,null);
     }
 
     //Obetner un libro por id

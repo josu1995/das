@@ -14,8 +14,8 @@ public class AdaptadorListView extends BaseAdapter {
     private Context contexto;
     private LayoutInflater inflater;
     private String[] datos;
-
     private double[] puntuaciones;
+
     //constructura para crear la listview personalizado
     public AdaptadorListView(Context pcontext, String[] pdatos, double[]ppuntuaciones) {
         contexto = pcontext;
