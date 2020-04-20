@@ -4,15 +4,19 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
 import androidx.work.BackoffPolicy;
+import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 
 import android.content.Intent;
 import android.database.Cursor;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -27,8 +31,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
+import org.json.simple.JSONObject;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ProtocolException;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class Login extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
@@ -45,13 +58,41 @@ public class Login extends AppCompatActivity {
         Button login = findViewById(R.id.login);
         Button registro = findViewById(R.id.newRegistro);
 
+
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if(!task.isSuccessful()){
+                    return;
+                }
+
+                String token = task.getResult().getToken();
+                //Log.i("AAA",token+"");
+                Data datos = new Data.Builder()
+                        .putString("token",token)
+                        .build();
+
+                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(datos).build();
+                WorkManager.getInstance(Login.this).getWorkInfoByIdLiveData(otwr.getId())
+                        .observe(Login.this, new Observer<WorkInfo>() {
+                            @Override
+                            public void onChanged(WorkInfo workInfo) {
+                                if(workInfo != null && workInfo.getState().isFinished()){
+
+                                }
+                            }
+                        });
+                WorkManager.getInstance(Login.this).enqueue(otwr);
+            }
+        });
+
+
         /*PeriodicWorkRequest trabajoRepetitivo =
                 new PeriodicWorkRequest.Builder(Tarea.class,15, TimeUnit.MINUTES)
                         .build();
 
         WorkManager.getInstance(this).enqueue(trabajoRepetitivo);*/
-
-
 
         final EditText usuario = findViewById(R.id.usuario);
         final EditText pass = findViewById(R.id.password);
@@ -70,8 +111,8 @@ public class Login extends AppCompatActivity {
                             cu.moveToNext();
                             Singelton.setNombreUsuario(usuario.getText().toString());
                             Singelton.setIdUsuario(cu.getInt(0));
-                            Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
-                            //Intent i = new Intent(getApplicationContext(), Notas.class);
+                            //Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                            Intent i = new Intent(getApplicationContext(), ListadoFotos.class);
                             startActivity(i);
                             finish();
                         }else{

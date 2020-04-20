@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,6 +28,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ProtocolException;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class Registro extends AppCompatActivity {
     Bd GestorBD = new Bd(this,"biblioteca",null,4);
@@ -94,6 +101,9 @@ public class Registro extends AppCompatActivity {
                                                 .setAutoCancel(true);
 
                                         elManager.notify(1, elBuilder.build());
+
+
+
 
                                         //Volvemos a la pantalla de login
                                         Intent i = new Intent(getApplicationContext(),Login.class);

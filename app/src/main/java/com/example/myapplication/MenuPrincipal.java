@@ -24,6 +24,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class MenuPrincipal extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     int id= Singelton.getIdUsuario();
@@ -32,7 +34,9 @@ public class MenuPrincipal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
 
+
         MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
+
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
         AdRequest adRequest = new AdRequest.Builder().build();
