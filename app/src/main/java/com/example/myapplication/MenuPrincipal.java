@@ -85,6 +85,7 @@ public class MenuPrincipal extends AppCompatActivity {
         Button pendientes = findViewById(R.id.pendientes);
         Button busquedaUsuario = findViewById(R.id.buscarUsuario);
         Button marcador = findViewById(R.id.marcador);
+        Button menu = findViewById(R.id.menu);
 
         //toast para dar la bienvenida a el usuario
         Toast.makeText(getApplication().getApplicationContext(),"Bienvenido "+Singelton.getNombreUsuario(),Toast.LENGTH_LONG).show();
@@ -133,6 +134,13 @@ public class MenuPrincipal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),SettingsActivity.class);
+                startActivity(i);
+            }
+        });
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),MenuSecundario.class);
                 startActivity(i);
             }
         });

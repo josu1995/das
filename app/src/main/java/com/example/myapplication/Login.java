@@ -57,42 +57,11 @@ public class Login extends AppCompatActivity {
         Toast.makeText(getApplication().getApplicationContext(),"Gracias por usar esta LYBRETA",Toast.LENGTH_LONG).show();
         Button login = findViewById(R.id.login);
         Button registro = findViewById(R.id.newRegistro);
-
-
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if(!task.isSuccessful()){
-                    return;
-                }
-
-                String token = task.getResult().getToken();
-                //Log.i("AAA",token+"");
-                Data datos = new Data.Builder()
-                        .putString("token",token)
-                        .build();
-
-                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(datos).build();
-                WorkManager.getInstance(Login.this).getWorkInfoByIdLiveData(otwr.getId())
-                        .observe(Login.this, new Observer<WorkInfo>() {
-                            @Override
-                            public void onChanged(WorkInfo workInfo) {
-                                if(workInfo != null && workInfo.getState().isFinished()){
-
-                                }
-                            }
-                        });
-                WorkManager.getInstance(Login.this).enqueue(otwr);
-            }
-        });
-
-
-        /*PeriodicWorkRequest trabajoRepetitivo =
+        PeriodicWorkRequest trabajoRepetitivo =
                 new PeriodicWorkRequest.Builder(Tarea.class,15, TimeUnit.MINUTES)
                         .build();
 
-        WorkManager.getInstance(this).enqueue(trabajoRepetitivo);*/
+        WorkManager.getInstance(this).enqueue(trabajoRepetitivo);
 
         final EditText usuario = findViewById(R.id.usuario);
         final EditText pass = findViewById(R.id.password);
@@ -102,6 +71,7 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Esta parte es para conectarse con firebae pasando el usuario y pass.
                 firebaseAuth.signInWithEmailAndPassword(usuario.getText().toString(),pass.getText().toString()).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -111,8 +81,8 @@ public class Login extends AppCompatActivity {
                             cu.moveToNext();
                             Singelton.setNombreUsuario(usuario.getText().toString());
                             Singelton.setIdUsuario(cu.getInt(0));
-                            //Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
-                            Intent i = new Intent(getApplicationContext(), ListadoFotos.class);
+                            Intent i = new Intent(getApplicationContext(), MenuPrincipal.class);
+                            //Intent i = new Intent(getApplicationContext(), ListadoFotos.class);
                             startActivity(i);
                             finish();
                         }else{

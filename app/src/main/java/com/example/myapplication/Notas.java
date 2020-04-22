@@ -14,6 +14,8 @@ public class Notas extends AppCompatActivity {
     Button guardar;
     EditText titulo,cuerpo;
     @Override
+
+    //El usuario mete unos tetxto y se encarga de llamar a la actividad de widget donde se creara este mismo.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notas);

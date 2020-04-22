@@ -30,6 +30,7 @@ public class Tarea  extends Worker {
         return Result.success();
     }
 
+   //Creamos una notificación la cual mostrar el worker cada 15minutos.
     private void displayNotification(String task,String desc){
         NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 

@@ -26,7 +26,7 @@ public class GeneradorConexionesSeguras {
 
     private GeneradorConexionesSeguras() {
     }
-
+    //Este codigo se nos da por el profesor y es para poder generar una conexion segura con nuestro servidor.
     public static GeneradorConexionesSeguras getInstance() {
         if (instancia == null) {
             instancia = new GeneradorConexionesSeguras();

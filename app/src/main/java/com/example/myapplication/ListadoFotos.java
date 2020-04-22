@@ -21,7 +21,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+
 
 public class ListadoFotos extends AppCompatActivity {
     Bd GestorBD = new Bd(this,"biblioteca",null,4);
@@ -34,12 +34,13 @@ public class ListadoFotos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_fotos);
 
+        //buscamos todas las uris que tenemos en nuestra base de datos local
+        //y con cada uri vamos a nuestro servidor de firebase y cogemos
+        //esas fotos
         mProgressDialog = new ProgressDialog(this);
-
         mStorageRef = FirebaseStorage.getInstance().getReference();
         Cursor cu = Consultas.getUris(GestorBD);
         while (cu.moveToNext()) {
-
             mProgressDialog.setTitle("Cargando...");
             mProgressDialog.setMessage("Las fotos se estan cargando.");
             mProgressDialog.setCancelable(false);
@@ -62,6 +63,7 @@ public class ListadoFotos extends AppCompatActivity {
 
 
     }
+    //una vez se han cargado todas las imagenes las meteemos en nuestro adapter para mostrarla en nuestra lista personalizada
     public void cargarImagenes(){
         Log.i("AAA","Cargando");
         Uri [] img = new Uri [imagenes.size()];

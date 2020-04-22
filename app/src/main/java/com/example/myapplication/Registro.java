@@ -4,6 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -28,6 +33,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -73,11 +80,12 @@ public class Registro extends AppCompatActivity {
                 }else{
                     //Si las comprobaciones son correctas miramos que el usuario no este ya registrado, con
                     //ese nombre de usuario
+                    //Este sirve para llamar a firebase y registrar el usuario.
                     firebaseAuth.createUserWithEmailAndPassword(usuario.getText().toString(), pass.getText().toString())
                             .addOnCompleteListener(Registro.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    //checking if success
+                                    //si se registra
                                     if(task.isSuccessful()){
                                         Consultas.registrarUsuario(usuario.getText().toString(), pass.getText().toString(),GestorBD);
                                         Toast.makeText(Registro.this,"Se ha registrado el usuario con el email: "+ usuario.getText().toString(),Toast.LENGTH_LONG).show();
@@ -102,13 +110,40 @@ public class Registro extends AppCompatActivity {
 
                                         elManager.notify(1, elBuilder.build());
 
+                                        //Llamamos a firebase para recoger el token de este dispitivo
+                                        //Una vez lo tenemos llamamos al workmanager que conecta con nuestra base de datos
+                                        //pasando el token
+                                        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if(!task.isSuccessful()){
+                                                    return;
+                                                }
 
+                                                String token = task.getResult().getToken();
+                                                Data datos = new Data.Builder()
+                                                        .putString("token",token)
+                                                        .build();
 
+                                                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDWebService.class).setInputData(datos).build();
+                                                WorkManager.getInstance(Registro.this).getWorkInfoByIdLiveData(otwr.getId())
+                                                        .observe(Registro.this, new Observer<WorkInfo>() {
+                                                            @Override
+                                                            public void onChanged(WorkInfo workInfo) {
+                                                                if(workInfo != null && workInfo.getState().isFinished()){
+
+                                                                }
+                                                            }
+                                                        });
+                                                WorkManager.getInstance(Registro.this).enqueue(otwr);
+                                            }
+                                        });
 
                                         //Volvemos a la pantalla de login
                                         Intent i = new Intent(getApplicationContext(),Login.class);
                                         startActivity(i);
                                         finish();
+                                        //Diferentes excepcion personalizadas dependiendo el error que nos de.
                                     }else{
                                         if(task.getException().getMessage().equals("The email address is badly formatted.")){
                                             Toast.makeText(Registro.this,"El email no tiene un formato correcto",Toast.LENGTH_LONG).show();

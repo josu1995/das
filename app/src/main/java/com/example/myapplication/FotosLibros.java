@@ -47,6 +47,7 @@ public class FotosLibros extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fotos_libros);
 
+        //Creamos un pequeño anuncio el cual se nos mostrara en la parte superior de la ventana
         mStorageRef = FirebaseStorage.getInstance().getReference();
         MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
         mAdView = findViewById(R.id.adView);
@@ -86,16 +87,19 @@ public class FotosLibros extends AppCompatActivity {
                 }
             }
         });
-
+        //Cuando le damos a subir comprobamos que no esta vacia la imagen.
+        //Si no subiremos la foto ya sea de la camara o del movil
         subir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(laminiatura != null){
+                    //El process dialog nos permite mostrar un texto el cual no se cerrara hasta que se acabe la subida
                     mProgressDialog.setTitle("Subiendo...");
                     mProgressDialog.setMessage("La foto se esta subiendo.");
                     mProgressDialog.setCancelable(false);
                     mProgressDialog.show();
 
+                    //Hacemos la imagen mas pequeña
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     laminiatura.compress(Bitmap.CompressFormat.JPEG,100,baos);
 
@@ -129,6 +133,7 @@ public class FotosLibros extends AppCompatActivity {
                     filePath.putFile(imagenSeleccionada).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //guardamos la uri en nuestra base de datos local.
                             Consultas.registrarUri(nombre,GestorBD);
                             mProgressDialog.dismiss();
                             Toast.makeText(FotosLibros.this,"La foto se subió correctamente",Toast.LENGTH_SHORT).show();
@@ -147,6 +152,7 @@ public class FotosLibros extends AppCompatActivity {
         });
     }
     @Override
+    //Vemos si la foto esta cogida desde la galeria o desde la camara
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODIGO_GALERIA && resultCode == RESULT_OK) {
@@ -154,7 +160,6 @@ public class FotosLibros extends AppCompatActivity {
             imagenSeleccionada = data.getData();
             elImageView.setImageURI(imagenSeleccionada);
         }
-
         if (requestCode == CODIGO_FOTO && resultCode == RESULT_OK) {
             imagenSeleccionada=null;
             Bundle extras = data.getExtras();

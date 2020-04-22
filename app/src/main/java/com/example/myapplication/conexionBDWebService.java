@@ -27,10 +27,11 @@ public class conexionBDWebService extends Worker {
 
         String valor= getInputData().getString("token");
 
-
+        //Creamos la conexion segura con la base de datos
         HttpsURLConnection urlConnection= GeneradorConexionesSeguras.getInstance()
                 .crearConexionSegura(getApplicationContext(),"https://134.209.235.115/jgutierrez053/WEB/insert.php");
 
+        //Creamos un JSON con los parametros que le vamos a pasar y se los añadimos a nuestra conexion
         JSONObject parametrosJSON = new JSONObject();
         parametrosJSON.put("token", valor);
 
@@ -43,6 +44,7 @@ public class conexionBDWebService extends Worker {
             out.print(parametrosJSON.toString());
             out.close();
 
+            //ejecutamos la conexion y recogemos el codigo que nos devuelve
             int statusCode = urlConnection.getResponseCode();
             Log.i("AAA",statusCode+"");
 
