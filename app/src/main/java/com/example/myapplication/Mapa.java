@@ -28,7 +28,6 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 
-import android.os.Bundle;
 
 import android.util.Log;
 import android.widget.Toast;
@@ -45,18 +44,11 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+
 
 import java.util.Objects;
-
+//Clase que se encarga de mostrarnos el mapa y la ubicacion actual
 public class Mapa extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
@@ -80,34 +72,17 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback, Google
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
-        initGoogleAPIClient();  //Init Google API Client
-        checkPermissions();     //Check Permission
+        initGoogleAPIClient();
+        checkPermissions();
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //ESTOS SON LOS ICONOS PERSONALIZABLES (SUSTITUYELOS)
-        //iconUser = BitmapDescriptorFactory.fromResource(R.drawable.common_google_signin_btn_icon_light_focused);
-        //iconClient = BitmapDescriptorFactory.fromResource(R.drawable.common_google_signin_btn_icon_light_focused);
-
         stateMap = false;
-        //Este handler será ejecutado 5 segundos después, lo uso ya que me ha pasado que aún dandole los permisos de gps por primera vez no los reconoce y no detecta nuestra ubicación, pero los puedes omitir .
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                if (!stateMap) {
-                    initGoogleAPIClient();  //Init Google API Client
-                    checkPermissions();     //Check Permission
-                }
-            }
-
-            ;
-        }, 10000); //timer
-
     }
 
-    //////////////////////////////////////////////////////////////GPS/////////////////////////////////////////////////////////////////
-    private void initGoogleAPIClient() {
+     private void initGoogleAPIClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(Mapa.this)
                 .addApi(LocationServices.API)
                 .build();
@@ -216,7 +191,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback, Google
             //Si la acción es la ubicación
             if (intent.getAction().matches(BROADCAST_ACTION)) {
                 LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                //Compruebe si el GPS está encendido o apagado
+                //Comprueba si el GPS está encendido o apagado
                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     Log.e("About GPS", "GPS is Enabled in your device");
                 } else {
@@ -256,7 +231,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback, Google
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -299,17 +274,10 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback, Google
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Posición Actual");
-        //markerOptions.icon(iconUser);
+
         mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));//AQUI MODIFICA EL ZOOM AL MAPA SEGUN TUS NECESIDADES
 
-        ///////////////////////////////////////ESTE ES EL MARCADOR DEL DESTINO (ES UN MARCADOR CON UNA POCISION ESTATICA) ///////////////////////////////////////
-        latLngOtro = new LatLng(40, -3);
-        MarkerOptions markerOptions2 = new MarkerOptions();
-        markerOptions2.position(latLngOtro);
-        markerOptions2.title("ESTE ES TU DESTINO");
-       // markerOptions2.icon(iconClient);
-        markerClient = mGoogleMap.addMarker(markerOptions2);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

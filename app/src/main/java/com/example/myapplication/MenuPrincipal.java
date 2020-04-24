@@ -38,6 +38,9 @@ public class MenuPrincipal extends AppCompatActivity {
         MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
 
         mInterstitialAd = new InterstitialAd(this);
+        //Es un id que se obtiene de la aplicacion de la que quieres hacer publicidad
+        //https://support.google.com/admob/answer/6232340?hl=es
+        //yo he usado una de prueba que da google pero ese seria el proceso para obtenerla
         mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
         AdRequest adRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(adRequest);
