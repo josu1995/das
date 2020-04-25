@@ -63,8 +63,8 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback, Google
     private Location location;
 
     private Marker mCurrLocationMarker, markerClient;
-    //private BitmapDescriptor iconUser, iconClient;
-    private LatLng latLng, latLngOtro;
+
+    private LatLng latLng;
 
     private boolean stateMap;
 
@@ -268,15 +268,15 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback, Google
             mCurrLocationMarker.remove();
             markerClient.remove();
         }
-        stateMap=true;//en el caso de que se ejecute el Handler y entre a onLocationChanged va volver verdadero stateMap y no volvera a pedir permisos de GPS
-        ///////////////////////////////////////ESTE ES EL MARCADOR DE TU UBICACIÓN ACTUAL///////////////////////////////////////
+        //Posicion actual de nuestro dispositivo
+        stateMap=true;
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Posición Actual");
 
         mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));//AQUI MODIFICA EL ZOOM AL MAPA SEGUN TUS NECESIDADES
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
 
     }
 
@@ -295,7 +295,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback, Google
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             } else {
-                Toast.makeText(this, "No cuentas con los permisos necesarios, cierra y abre de nuevo la aplicación", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No tienes los permisos necesarios, cierra y abre de nuevo la aplicación", Toast.LENGTH_SHORT).show();
             }
         } else {
             buildGoogleApiClient();
